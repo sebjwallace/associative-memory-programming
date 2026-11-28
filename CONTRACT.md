@@ -52,14 +52,19 @@ Words are agreed deliberately. Where a name is still open, it is marked.
   again. *(Name open: "activity" or "active set".)*
 - **DEF-11 Heat.** What is left incomplete: activity that nothing explains, a gap, a misfit, rivals that can't both
   hold. Energy that can't flow.
-- **DEF-12 invoke.** The reading operation: input arrives, the memory completes, rivals compete, and what can't be
-  explained is left as heat.
-- **DEF-13 anneal.** The learning operation: new structure forms to resolve heat. Composition, abstraction and
-  decomposition are shapes it takes.
+- **DEF-12 Asking.** Reading the memory: a cue arrives, the memory completes, rivals compete, and what can't be
+  explained is left as heat. The language's primitives for it include `complete` and `touch`.
+- **DEF-13 Learning.** New structure forming to resolve heat. Composition, abstraction and decomposition are shapes it
+  takes. How memory should learn is still a research question: annealing is one candidate, not the definition. The
+  language provides the primitives learning is built from, and learning procedures are written from them (the language
+  contract, LG-CAP-9).
 - **DEF-14 Loaded and stored.** Where structure physically lives: loaded is in RAM, stored is on disk. Heat words
   (warm, cold) are kept for heat only.
 - **DEF-15 Source.** Where a piece of structure came from: what was received, what was declared, or what the engine
   formed itself, with a pointer back to it.
+- **DEF-16 Support.** The structure backing an assembly in the current context. When rivals compete, the one with more
+  structure within the context wins over structure that belongs to another context. That is how ambiguity is
+  resolved.
 
 ---
 
@@ -114,7 +119,7 @@ Words are agreed deliberately. Where a name is still open, it is marked.
 **Capabilities**
 - *Core*
 - **CAP-1** Completion: a few active pieces bring back the whole assembly.
-- **CAP-2** Competition: rival explanations contend, and the better supported wins.
+- **CAP-2** Competition: rival explanations contend, and the one with more structure in context wins.
 - **CAP-3** Sparse distributed representation: a thing is a small set of cells; alike means sharing cells.
 - **CAP-4** Learning by comparing: what two things share becomes a part; what differs is what's left.
 - **CAP-5** Binding what happens together: what is active together, and unexplained, can form one assembly.
@@ -149,7 +154,7 @@ Words are agreed deliberately. Where a name is still open, it is marked.
 
 **GOL-1 · Programmable.** The goal that makes AMP a discipline rather than one system. An engineer can shape a memory
 in three ways, freely mixed: **declare** structure by hand (the rules that must hold, the skeleton of a procedure),
-**teach** it from examples (invoke and anneal on chosen input, then fix what was learnt), and **grow** it on the job
+**teach** it from examples (learn from chosen input, then fix what was learnt), and **grow** it on the job
 (leave chosen parts free to keep learning). *Met when:* one program uses all three, and the result can be tested and
 explained like any other. *Not to be confused with* "learns only from what it's given": declared structure is a first
 class way to program, not a shortcut around learning (CON-14 keeps it honest).
@@ -289,8 +294,9 @@ structure (GOL-1) is not a training signal: it is programming, and is marked as 
 in; recognition from partial, noisy input. *Serves:* GOL-2, GOL-3, OPZ-2. *Costs:* a cue that fits several assemblies
 equally recalls none (CON-10), so sometimes more evidence is needed.
 
-**CAP-2 · Competition.** *Gives:* rival explanations contend for the same cells, and the one with more support wins. One
-more supporting cell is enough. It is how AMP rejects what doesn't fit, and how a volume with room for one active cell
+**CAP-2 · Competition.** *Gives:* rival explanations contend for the same cells, and the one with more support
+(DEF-16) wins: more structure within the current context outcompetes structure from another context. One more
+supporting cell is enough. It is how AMP rejects what doesn't fit, and how a volume with room for one active cell
 acts as a variable. *Serves:* GOL-1, GOL-7, CON-10. *Costs:* ties must be held, not broken arbitrarily; and because more
 structure means more support, a source that supplies more input can outcompete one that supplies less. Where that
 matters, how support is counted (per item, per source, per party) is a program's declared choice (CON-14).
@@ -397,9 +403,12 @@ lead, settling locally, and trusting what was lived.
 - *"Prefer removing structure to adding it"* conflicted with nothing breaking. It becomes **prefer resolving a misfit to
   building around it** (PRN-3), which keeps its intent: no patches.
 
-**Left out, as stale or specific to the old engine:**
+**Not carried over yet, as a question of principle:**
 - Energy as the cost of a whole description, the "one rule" that a change is kept only if that cost falls, and "one
-  currency taken from the world": these belong to the retired core's pricing. Heat as incompletion replaces them.
+  currency taken from the world". Whether these are among AMP's principles is the owner's decision, made on principle,
+  not on the state of any experiment.
+
+**Left out, as stale or specific to the old engine:**
 - Thresholds from prices, the exact-records notebook (now legacy), and the two kinds of memory: specific mechanisms,
   not yet settled for AMP.
 - Columns, segments, and other names from earlier designs.
@@ -416,3 +425,4 @@ lead, settling locally, and trusting what was lived.
    discipline; heat first among optimizations.
 4. The drafts: GOL-6, GOL-7, OPZ-6, OPZ-7, CAP-14, PRN-8.
 5. Whether deletion at an owner's request (CON-7) belongs here or in a separate contract about ownership and data.
+6. Whether energy, the one rule and one currency belong in this contract as principles.

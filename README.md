@@ -28,22 +28,32 @@ you build can be trusted, and still accommodates the noise.
 Its building blocks come from associative memory, the kind of memory brains and nervous systems use, where a few pieces
 of something bring back the whole of it.
 
-- **Cells** are the smallest unit. A cell is active or not. There are no strengths and no weights.
-- **Volumes** hold cells, and can hold other volumes. A volume has behaviour of its own, such as how many of its cells
-  may be active at once, and so what competes inside it.
-- **Connections** run from cell to cell, always in one direction, and arrive at a cell in groups called **gates**. A gate
-  opens when enough of its connections are active. *(The final name for a connection is still open.)*
-- **Assemblies** are groups of cells that point at each other in a loop. Activate part of one and the rest comes back.
-  That is how AMP recognises something from a fragment.
+- **The substrate** is everything a running program holds: every cell, every piece of structure, and the activity and
+  heat within them. One interconnected material, held in RAM or stored on disk.
+- **Volumes** are bounded parts of the substrate: cells, with a size and a **density** (how many of their cells may be
+  active at once, within a range that can move). A volume may also have a **shape**, a 2D or 3D space with places and
+  neighbours, so that work written into it can be seen. *(Proposed.)*
+- **Cells** are the smallest unit. A cell has no strength and no weight. At any moment it may be active or not, and hot
+  or not.
+- **Cell sets** are sets of cells in one volume. Cues, activity and hot cells are all cell sets, combined with ordinary
+  set operators.
+- **Encoders** are the boundary with the outside world. They turn input into **encodings** (indexes, a label and a
+  source), which a volume turns into cell sets. Encoders and volumes know nothing about each other.
+- **Assemblies** are groups of cells whose connections loop back on each other. Activate part of one and the rest comes
+  back. That is how AMP recognises something from a fragment.
 - **Transitions** are chains that point forwards, carrying activity on to what comes next. That is how AMP follows a
-  sequence, a process or a procedure.
+  sequence, a process or a procedure. *(Not yet in the language.)*
 
-The engine does two things with them:
+Programs do three things with them:
 
-- **invoke** reads. Input arrives, the memory completes it towards what it already knows, rival explanations compete, and
-  the better supported one wins. A true tie is held open, not guessed.
-- **anneal** learns. Whatever invoke couldn't explain is left as **heat**: a gap, a conflict, something that doesn't
-  fit. Annealing forms new structure that resolves it.
+- **Write** structure into a volume: an assembly, by hand or built from other structure. `fixed` structure can never be
+  outcompeted.
+- **Ask** a volume: `complete` returns the whole a cue completes to; `touch` returns everything a cue reaches. Rivals
+  compete; a true tie is held open, not guessed. Whatever couldn't be explained is **heat**: a gap, a conflict,
+  something that doesn't fit.
+- **Learn**: there is no single built-in learning method. Learning procedures are written in AMP from the same
+  primitives (comparing, composing, decomposing, writing), because how associative memory should learn is still an open
+  research question, and different problems call for different kinds of learning.
 
 ## The tenets
 
@@ -140,54 +150,72 @@ Install the tools (planned):
 go install github.com/sebjwallace/associative-memory-programming/cmd/amp@latest
 ```
 
-Start the REPL and give the memory something to learn. Three letters arrive, one moment after another:
+A first program, `fruit.amp`:
 
 ```
-amp> invoke c, a, t
-moment 1   c   incomplete   heat !c
-moment 2   a   incomplete   heat !a
-moment 3   t   incomplete   heat !t
+// fruit.amp
+let words: Encoder = Encoder(split: "word", cells: 1)
+let fruit: Volume = Volume(size: 64, density: 2% to 10%)
+
+let apple: Assembly[fruit] = write fruit using words <"apple", "red", "sweet"> fixed
+let cherry: Assembly[fruit] = write fruit using words <"cherry", "red", "sour">
+
+let apple_completion: Result[fruit] = complete(fruit, fruit{words{"apple"}})
+let red_completion: Result[fruit] = complete(fruit, fruit{words{"red"}})
+
+test "apple and cherry share red" {
+   expect apple.cells & cherry.cells == fruit{words{"red"}}
+}
 ```
 
-Nothing explained any of them, so each moment left heat (`!`). Invoking alone learns nothing. Annealing resolves the
-heat by forming structure:
+Run it and look at what came back:
 
 ```
-amp> anneal
-forms #1 = <c, a, t>       an assembly: any part brings back the rest
-forms #2 = c -> a -> t     a transition: the order they came in
-heat 3 -> 0
+amp> run "fruit.amp"
+amp> apple_completion
+candidates   apple                 1 of 3 given, 2 recalled
+heat         none
+sources      fruit.amp, line 5
+
+amp> red_completion
+candidates   apple, cherry         1 of 3 each
+ties         apple | cherry
+heat         contested: "red"
 ```
 
-Now give it part of what it learnt:
+Asked for "apple", the memory brings back the whole. Asked for "red", it finds two equally good answers and says so,
+rather than guessing. Every answer says where it came from. Ask it directly:
 
 ```
-amp> invoke c
-moment 1   c
-moment 2   +a     invoked by c
-moment 3   +t     invoked by a
-complete   #1 <c, a, t>   3 of 3
+amp> why red_completion
 ```
 
-The `+` marks what the memory brought back by itself, and every line says why. Ask it directly:
-
-```
-amp> why moment 2
-```
-
-From there a program grows by the three moves of the dial: **declare** what must hold, **teach** by example, and choose
-what may keep learning. Then **examine** it with AMX (tests are cues with expected completions, plus where heat should
-and shouldn't appear) and look inside with AMT.
+From there a program grows by the dial: **write** what must hold, **learn** from sources with a learning procedure, and
+choose what may keep changing. Then **examine** it with tests, AMX and AMT.
 
 ## Where things stand
 
-- The engine and interpreter are being built in Go.
-- The notation is being settled one step at a time. Terms are agreed deliberately, and a few names are still open.
-- The research behind AMP (the theory of heat, the experiments, and how the design was reached) lives in
+- **The language** is being designed one decision at a time. What is settled, and what is still in progress, is in the
+  [language specification](language-specification/README.md), which also suggests the order in which to build it.
+- **The engine and interpreter** are next: built step by step from the specification, in Go for now (the implementation
+  language has no say over AMP's syntax).
+- **The research** behind AMP (the theory of heat, the experiments, and how the design was reached) lives in
   [anneal-machine](https://github.com/sebjwallace/anneal-machine), which continues as the research project.
 - AMP builds on a long line of work: Hebb's cell assemblies, Hopfield networks, Kanerva's sparse distributed memory and
   the hyperdimensional computing that grew from it, case-based reasoning, and neurosymbolic AI. [VISION.md](VISION.md)
   says what AMP aims to add.
+
+## The documents
+
+| Document | What it is |
+|---|---|
+| [VISION.md](VISION.md) | where AMP is heading, and what it could be like to use |
+| [CONTRACT.md](CONTRACT.md) | the system contract: what AMP must be, whoever builds it |
+| [LANGUAGE-CONTRACT.md](LANGUAGE-CONTRACT.md) | the language contract: what the language must be |
+| [language-specification/](language-specification/README.md) | the language in detail: stable decisions and work in progress |
+
+The contracts are the masters. The specification follows them, and the code follows the specification. The state of the
+code never dictates a contract.
 
 ## Licence
 

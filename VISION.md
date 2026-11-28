@@ -213,7 +213,7 @@ elder.
 seasons, and because structure traces to its source, those rules travel with it. If an elder withdraws something, it can
 be found and removed. The memory lives on the community's own hardware.
 
-**Teaching.** Elders tell stories and walk the land naming places, and each session is annealed in. Few examples are
+**Teaching.** Elders tell stories and walk the land naming places, and the memory learns from each session. Few examples are
 enough, which is what this situation needs. A correction ("that word is for a river, not a stream") becomes structure at
 once.
 
@@ -277,12 +277,12 @@ check, open another if still rising, hold when steady.
 set number of moments, the service hands over to a simple conventional safe-mode controller and calls a person. When it
 doesn't understand, it says so and does the simple safe thing.
 
-**Learning from the operator.** Years of logs are replayed and annealed, so it picks up local habits, like holding water
+**Learning from the operator.** Years of logs are replayed and learnt from, so it picks up local practice, like holding water
 back in late spring because the far field always dries first. The engineer reads what formed, to check it learnt the
-habit and not an accident in the logs.
+practice and not an accident in the logs.
 
-**The run loop.** Every minute: read sensors, encode, invoke, settle within a hard cap on moments (a controller must
-answer in bounded time), read the output, move the gates, write the trace. Anneal once a day at rest, never mid-storm.
+**The run loop.** Every minute: read sensors, encode, ask, settle within a hard cap on moments (a controller must
+answer in bounded time), read the output, move the gates, write the trace. Learn once a day at rest, never mid-storm.
 
 **Testing and operating.** Transcript tests (these readings, expect these actions and no heat), plus a simulated
 catchment running a hundred years of synthetic weather overnight, including storms worse than any on record. Debugging
@@ -410,6 +410,25 @@ Small creations, shared and remixed, are also research: many people running quic
 of the discipline will be built on.
 
 ---
+
+## Space: seeing it think
+
+The research behind AMP found that space matters. Associative memory learned to carry out whole procedures once its
+work was written at places and read by a focus that moved over them, like a Turing machine's tape made into a page. In
+AMP, that could become a volume with a shape: a 2D page or a 3D space that is part of the substrate, holding geometry
+and nothing else, while what is learned about how things sit relative to each other lives in assemblies alongside what
+things are.
+
+It would be the part of the machine you can watch. A sum written out with its carries. A remembered layout coming back.
+A shape being designed in 3D. It works both ways: an encoder lays a page, an image or a model into the space and the
+memory recognises it; or the memory completes something it knows and draws it into the space, which is a kind of
+imagining. With transitions, it could run: cue an apple and see it ripen from green to red, a digital twin made of
+associative memory. For understandability and for testing, that may be one of AMP's strongest gifts: instead of asking
+what the machine is thinking, you look.
+
+The lesson that comes with it: in the research, the page and the arithmetic of moving across it lived in code. In AMP,
+the canvas must never do the thinking. Places and neighbours are geometry; moves and relations are structure, learned
+or declared, where they can be seen and checked. The language specification sets this out as a proposal (chapter 13).
 
 ## Honesty and its limits
 
